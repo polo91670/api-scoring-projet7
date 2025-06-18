@@ -64,8 +64,8 @@ selected_id = st.selectbox("Choisissez un identifiant client :", client_ids)
 if st.button("Prédire"):
     try:
         response = requests.post(API_URL, json={"client_id": selected_id})
-        #st.write("Statut HTTP :", response.status_code)
-        #st.write("Texte brut :", response.text)
+        st.write("Statut HTTP :", response.status_code)
+        st.write("Texte brut :", response.text)
 
         if response.status_code == 200:
             result = response.json()
