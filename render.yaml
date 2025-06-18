@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: streamlit-score-app
+    name: api-scoring-projet7
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run streamlit_app/app.py --server.enableCORS=false --server.enableXsrfProtection=false
+    startCommand: uvicorn app.main:app --host=0.0.0.0 --port=8000
     autoDeploy: true
