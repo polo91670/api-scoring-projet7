@@ -10,7 +10,8 @@ def load_model(path="LGBMClm_model.pkl"):
 
 def predict_score(model, client_data, seuil=SEUIL_OPTIMAL):
     proba = model.predict_proba([client_data])[0][1]
-    decision = "Accepté" if proba >= seuil else "Refusé"
+    decision = "Refusé" if proba >= seuil else "Accepté"
+
     return {
         "score_proba": round(proba, 3),
         "seuil": seuil,

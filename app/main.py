@@ -5,7 +5,7 @@ from app.model import load_model, predict_score
 
 app = FastAPI(
     title="API Scoring Crédit",
-    description="Projet 7 - Implémenter un modèle de score (OpenClassrooms)",
+    description="Projet 7 - Implémenter un modèle de score (OpenClassrooms) V1.0",
     version="1.0"
 )
 
@@ -20,7 +20,7 @@ class ClientID(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"message": "Bienvenue sur l'API de scoring crédit 🎯"}
+    return {"message": "Bienvenue sur l'API de scoring crédit"}
 
 @app.get("/client_ids")
 def get_client_ids():
