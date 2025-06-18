@@ -1,12 +1,22 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from app.data import load_data
 from app.model import load_model, predict_score
 
 app = FastAPI(
     title="API Scoring Crédit",
-    description="Projet 7 - Implémenter un modèle de score (OpenClassrooms) V1.0",
-    version="1.0"
+    description="Projet 7 - Implémenter un modèle de score (OpenClassrooms) V1.1",
+    version="1.1"
+)
+
+#Ajout du middleware CORS pour autoriser les appels depuis l’extérieur
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Autorise tous les domaines (à restreindre en prod si besoin)
+    allow_credentials=True,
+    allow_methods=["*"],  # Autorise toutes les méthodes (POST, GET, etc.)
+    allow_headers=["*"],  # Autorise tous les headers
 )
 
 # Chargement des ressources globales
