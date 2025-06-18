@@ -1,4 +1,4 @@
-name: Deploy FastAPI+Streamlit to Render
+name: Deploy FastAPI and Streamlit to Render
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.12.4'
 
-      - name: Install API dependencies
+      - name: Installer les dépendances API
         run: |
           cd app
           pip install -r requirements.txt
@@ -28,11 +28,11 @@ jobs:
           pytest || echo "Exécution des tests unitaires"
 
       - name: Déployer via Render Deploy Hook
-        run: curl "$RENDER_DEPLOY_HOOK_URL"
+        run: curl "$RENDER_DEPLOY_HOOK_API"
         env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-   
-   deploy-streamlit:
+          RENDER_DEPLOY_HOOK_API: ${{ secrets.RENDER_DEPLOY_HOOK_API }}
+
+  deploy-streamlit:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,12 +44,12 @@ jobs:
         with:
           python-version: '3.12.4'
 
-      - name: Install API dependencies
+      - name: Installer les dépendances Streamlit
         run: |
           cd streamlit_app
           pip install -r requirements.txt
 
       - name: Déployer via Render Deploy Hook
-        run: curl "$RENDER_DEPLOY_HOOK_URL"
+        run: curl "$RENDER_DEPLOY_HOOK_STREAMLIT"
         env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}   
+          RENDER_DEPLOY_HOOK_STREAMLIT: ${{ secrets.RENDER_DEPLOY_HOOK_STREAMLIT }}
