@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 #Charger les ID clients depuis un fichier local
 @st.cache_data
 def load_client_ids():
-    df = pd.read_csv("../data.csv")
+    df = pd.read_csv("data.csv")
     df.rename(columns = {'SK_ID_CURR': 'client_id'})
     return df["client_id"].astype(str).tolist()
 
