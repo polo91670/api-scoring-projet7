@@ -13,10 +13,10 @@ def load_client_ids():
 
 
 #URL de ton API FastAPI déployée sur Render
-API_URL = "https://api-scoring-projet7.onrender.com/predict_score"
+API_URL = "https://api-scoring-projet7.onrender.com"
 #API_URL = "http://localhost:8000/predict_score"
 
-st.title("Score Client - Projet 7")
+st.title("Projet 7 Openclassroom : Implémenter un modèle de score")
 
 def show_gauge(probability):
     fig = go.Figure(go.Indicator(
@@ -61,9 +61,9 @@ client_ids = load_client_ids()
 selected_id = st.selectbox("Choisissez un identifiant client :", client_ids)
 
 #Bouton de prédiction
-if st.button("Prédiction"):
+if st.button("Prédire le score"):
     try:
-        response = requests.post(API_URL, json={"client_id": selected_id})
+        response = requests.post(f"{API_URL}/predict_score", json={"client_id": selected_id})
         #st.write("Statut HTTP :", response.status_code)
         #st.write("Texte brut :", response.text)
 

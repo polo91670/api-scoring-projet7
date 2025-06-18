@@ -3,6 +3,16 @@ services:
     name: api-scoring-projet7
     env: python
     plan: free
+    rootDirectory: app
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host=0.0.0.0 --port=8000
+    autoDeploy: true
+
+  - type: web
+    name: streamlit-app
+    env: python
+    plan: free
+    rootDirectory: streamlit_app
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run streamlit_app/app.py --server.port=10000 --server.address 0.0.0.0
     autoDeploy: true
