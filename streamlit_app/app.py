@@ -13,8 +13,8 @@ def load_client_ids():
 
 
 #URL de ton API FastAPI déployée sur Render
-#API_URL = "https://api-scoring-projet7.onrender.com/predict_score"
-API_URL = "http://localhost:8000/predict_score"
+API_URL = "https://api-scoring-projet7.onrender.com/predict_score"
+#API_URL = "http://localhost:8000/predict_score"
 
 st.title("Score Client - Projet 7")
 
