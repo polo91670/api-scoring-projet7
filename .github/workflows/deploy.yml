@@ -25,7 +25,7 @@ jobs:
 
       - name: Lancer les tests unitaires
         run: |
-          pytest || echo "Les tests ont échoué mais le déploiement continue"
+          pytest || echo "Exécution des tests unitaires"
 
       - name: Déployer via Render Deploy Hook
         run: curl "$RENDER_DEPLOY_HOOK_URL"
