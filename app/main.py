@@ -5,8 +5,8 @@ from app.data import load_data
 from app.model import load_model, predict_score
 
 app = FastAPI(
-    title="API Scoring Crédit",
-    description="Projet 7 - Implémenter un modèle de score (OpenClassrooms) V1.1",
+    title="Projet 7 OpenClassrooms - Implémenter un modèle de score",
+    description="Création d'une API par Paul VA NYIA LU",
     version="1.1"
 )
 
