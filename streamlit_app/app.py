@@ -22,21 +22,22 @@ def show_gauge(probability):
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=probability * 100,
+        #number={'font': {'size': 50}},  # Taille de police réduite ici
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "Probabilité de défaillance du client (en %)", 'font': {'size': 20}},
+        #title={'text': "Probabilité de défaillance du client (en %)", 'font': {'size': 20}},
         gauge={
-            'axis': {'range': [0, 100], 'tickvals': [0, 26, 51, 76, 100], 
-            'ticktext': ["0", "26", "51", "76", "100"]},
-            'bar': {'color': "black",  'thickness': 0},
+            'axis': {'range': [0, 100], 'tickvals': [0, 9, 100], 
+            'ticktext': ["0", "9", "100"], 'tickfont': {'size': 18}},
+            'bar': {'color': "white",  'thickness': 0.7},
             'bgcolor': "white",
             'steps': [
-                {'range': [0, 26], 'color': "green"},    #client à risque très faible
-                {'range': [26, 51], 'color': "yellow"},  #client à risque modéré
-                {'range': [51, 76], 'color': "orange"},  #client à risque élevé
-                {'range': [76, 100], 'color': "red"},    #client à risque très elévé
+                {'range': [0, 9], 'color': "#49C289"},    #client à risque faible=décision accepté
+                #{'range': [26, 51], 'color': "yellow"},  #client à risque modéré
+                #{'range': [51, 76], 'color': "orange"},  #client à risque élevé
+                {'range': [9, 100], 'color': "#D83E69"},    #client à risque elévé=décision refusé
             ],
             'threshold': {
-                'line': {'color': "white", 'width': 8},
+                'line': {'color': "white", 'width': 3},
                 'thickness': 0.9,
                 'value': probability * 100
             }
@@ -44,17 +45,34 @@ def show_gauge(probability):
         }
     ))
     # Ajouter des labels personnalisés sous la jauge
-    fig.update_layout(height=250, font = {'color': "white", 'family': "Arial"}, 
-        annotations=[
-            dict(x=0.265, y=0.35, text="Faible", showarrow=False, font=dict(size=12, color="black")),
-            dict(x=0.42, y=0.85, text="Modéré", showarrow=False, font=dict(size=12, color="black")),
-            dict(x=0.58, y=0.85, text="Élevé", showarrow=False, font=dict(size=12, color="black")),
-            dict(x=0.745, y=0.35, text="Extrême", showarrow=False, font=dict(size=12, color="black")),
-        ],
-        margin={'t':50, 'b':15}
-    )
+    #fig.update_layout(height=250, font = {'color': "white", 'family': "Arial"}, 
+    #    annotations=[
+      #      dict(x=0.24, y=1.3, text="Probabilité de défaillance du client (en %)", showarrow=False, font=dict(size=20, color="white"))
+     #       dict(x=0.246, y=0.01, text="Faible", showarrow=False, font=dict(size=12, color="black")),
+    #        dict(x=0.42, y=0.85, text="Modéré", showarrow=False, font=dict(size=12, color="black")),
+    #        dict(x=0.58, y=0.85, text="Élevé", showarrow=False, font=dict(size=12, color="black")),
+    #        dict(x=0.748, y=0.01, text="Élevé", showarrow=False, font=dict(size=12, color="black")),
+    #    ],
+    #    margin={'t':50, 'b':15} 
+    #)
+    # Pas de titre dans la figure elle-même
+    fig.update_layout(height=200, margin=dict(t=20, b=20, l=20, r=20)
+                     )
+
+    # Ajoute une annotation pour la valeur à la position voulue
+    #fig.add_annotation(x=0.5, y=0.5, text=round(probability*100,1), showarrow=False,
+    #               font=dict(size=40, color="white"))
+
+    #fig.add_annotation(
+     #   x=0.5, y=0,
+     #   text="🟩 Risque faible &nbsp;&nbsp;🟥 Risque élevé",
+     #   showarrow=False,
+     #   font=dict(size=13),
+     #   xref="paper", yref="paper"
+    #)
 
     st.plotly_chart(fig)
+
 
 def CreateProgressBar(pg_caption, pg_int_percentage, pg_colour, pg_bgcolour):
     pg_int_percentage = str(pg_int_percentage).zfill(2)
@@ -86,24 +104,36 @@ if st.button("Valider"):
 
             #st.success(f"Probabilité de défaut : {proba:.2%}")
 
+            #st.title("Probabilité de défaillance du client (en %)")
+            st.markdown("""
+            <h1 style='text-align: center; margin-top: 0px; margin-bottom: 0px; font-size: 20px;'>
+                Probabilité de défaillance du client (en %)
+            </h1>
+            """, unsafe_allow_html=True)
+            
             show_gauge(proba)  #Affiche la jauge ici
             #st.markdown(CreateProgressBar("Probabilité de défaillance ", proba*100, "A5D6A7", ""), True)
 
             #st.success(f"Décision : {decision}")
-            if proba <= 0.51:
+            if proba <= 0.09:
                 icone_response = "&#x2705;"
-                color_reponse = "yellow"
-                if proba <= 0.26:
-                    color_reponse = "green"
-            if proba > 0.51:
+                color_reponse = "#49C289"
+            if proba > 0.09:
                 icone_response = "&#x274C;"
-                color_reponse = "red"
-                if proba <= 0.76:
-                    color_reponse = "orange"
+                color_reponse = "#D83E69"
             
             pg_html=f"""<div style="text-align: center"> <font size="6">Décision : <b><font color="{color_reponse}">{decision}</font></b> {icone_response}</font></div>"""
             st.markdown(pg_html, unsafe_allow_html=True)
-        
+
+            # Légende manuelle
+            st.markdown("""
+            <div style='text-align: left; margin-top: 10px; font-size: 15px;'>
+            <b><u>Légende</u> :</b><br>
+            🟩 [0 - 9%] : Risque faible de défaillance<br>
+            🟥 ]9 - 100%] : Risque élevé de défaillance 
+            </div>
+            """, unsafe_allow_html=True)
+    
         else:
             st.error(f"Erreur API : {response.status_code}")
             st.json(response.json())
