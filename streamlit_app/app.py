@@ -88,7 +88,53 @@ def CreateProgressBar(pg_caption, pg_int_percentage, pg_colour, pg_bgcolour):
 
 #Sélecteur d’ID client
 client_ids = load_client_ids()
-selected_id = st.selectbox("Choisissez un identifiant client :", client_ids)
+
+# CSS pour ajuster la hauteur et la marge de la selectbox
+st.markdown("""
+    <style>
+    /* Largeur et centrage de la selectbox */
+    div[data-baseweb="select"] {
+        width: 110px !important;
+        margin: 0;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    /* Aligner verticalement le contenu de la selectbox */
+    div[data-baseweb="select"] > div {
+        display: flex;
+        align-items: center;
+        height: 36px;  /* ajuster la hauteur au besoin */
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
+# Centrage via colonnes
+left, center, right = st.columns([1, 2, 1])
+
+with center:
+    # Liste déroulante (selectbox)
+    col1, col2 = st.columns([0.8, 2.2]) 
+    with col1:
+        #st.markdown("Choisissez un identifiant client :")
+         # Utilise un conteneur HTML avec alignement vertical centré
+        st.markdown("""
+            <div style='display: flex; align-items: center; height: 36px;'>
+                <p style='margin: 45px; font-weight: bold; white-space: nowrap;'>Choisissez un identifiant client :</p>
+            </div>
+        """, unsafe_allow_html=True)
+    with col2:
+        selected_id = st.selectbox("", client_ids)
+
+st.markdown("""
+    <style>
+    div.stButton > button {
+        display: block;
+        margin-left: 300px;
+        margin-right: auto;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 #Bouton de prédiction
 if st.button("Valider"):
@@ -105,14 +151,9 @@ if st.button("Valider"):
             #st.success(f"Probabilité de défaut : {proba:.2%}")
 
             #st.title("Probabilité de défaillance du client (en %)")
-            st.markdown("""
-            <h1 style='text-align: center; margin-top: 0px; margin-bottom: 0px; font-size: 20px;'>
-                Probabilité de défaillance du client (en %)
-            </h1>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<h1 style='text-align: center; margin-top: 0px; margin-bottom: 0px; font-size: 20px;'>Probabilité de défaillance du client { selected_id} (en %)</h1>", unsafe_allow_html=True)
             
             show_gauge(proba)  #Affiche la jauge ici
-            #st.markdown(CreateProgressBar("Probabilité de défaillance ", proba*100, "A5D6A7", ""), True)
 
             #st.success(f"Décision : {decision}")
             if proba <= 0.09:
