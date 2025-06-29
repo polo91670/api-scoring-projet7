@@ -26,15 +26,15 @@ def show_gauge(probability):
         domain={'x': [0, 1], 'y': [0, 1]},
         #title={'text': "Probabilité de défaillance du client (en %)", 'font': {'size': 20}},
         gauge={
-            'axis': {'range': [0, 100], 'tickvals': [0, 9, 100], 
-            'ticktext': ["0", "9", "100"], 'tickfont': {'size': 18}},
+            'axis': {'range': [0, 100], 'tickvals': [0, 51, 100], 
+            'ticktext': ["0", "51", "100"], 'tickfont': {'size': 14}},
             'bar': {'color': "white",  'thickness': 0.7},
             'bgcolor': "white",
             'steps': [
-                {'range': [0, 9], 'color': "#49C289"},    #client à risque faible=décision accepté
+                {'range': [0, 51], 'color': "#49C289"},    #client à risque faible=décision accepté
                 #{'range': [26, 51], 'color': "yellow"},  #client à risque modéré
                 #{'range': [51, 76], 'color': "orange"},  #client à risque élevé
-                {'range': [9, 100], 'color': "#D83E69"},    #client à risque elévé=décision refusé
+                {'range': [51, 100], 'color': "#D83E69"},    #client à risque elévé=décision refusé
             ],
             'threshold': {
                 'line': {'color': "white", 'width': 3},
@@ -156,10 +156,10 @@ if st.button("Valider"):
             show_gauge(proba)  #Affiche la jauge ici
 
             #st.success(f"Décision : {decision}")
-            if proba <= 0.09:
+            if proba <= 0.51:
                 icone_response = "&#x2705;"
                 color_reponse = "#49C289"
-            if proba > 0.09:
+            if proba > 0.51:
                 icone_response = "&#x274C;"
                 color_reponse = "#D83E69"
             
@@ -170,8 +170,8 @@ if st.button("Valider"):
             st.markdown("""
             <div style='text-align: left; margin-top: 10px; font-size: 15px;'>
             <b><u>Légende</u> :</b><br>
-            🟩 [0 - 9%] : Risque faible de défaillance<br>
-            🟥 ]9 - 100%] : Risque élevé de défaillance 
+            🟩 [0 - 51%] : Risque faible de défaillance<br>
+            🟥 ]51 - 100%] : Risque élevé de défaillance 
             </div>
             """, unsafe_allow_html=True)
     
