@@ -8,7 +8,7 @@ services:
     autoDeploy: true
 
   - type: web
-    name: streamlit-app
+    name: streamlit-scoring-projet7
     env: python
     plan: free
     buildCommand: pip install -r streamlit_app/requirements.txt
