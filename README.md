@@ -21,21 +21,22 @@ Cette API permet de prédire la probabilité de défaillance de remboursement d�
 - evidently 0.7.8
 
 ## Structure du projet concernant l'API
-API
-|--APP
-|-----main.py # Point d’entrée FastAPI
-|-----model.py # Chargement modèle + prédiction avec seuil
-|-----data.py # Chargement des données clients
-|-----requirements.txt # librairies nécessaires pour l'API
-|--STREAMLIT_APP
-|-----app.py # Point d’entrée interface streamlit
-|-----requirements.txt # librairies nécessaires pour streamlit
-|--TESTS
-|data.csv # Jeu de données clients (id_client + toutes les features issues de l'éatpe features engineering hors target)
-|LGBMClm_model.pkl # Modèle ML entraîné (via joblib)
-|threshold.txt # Chargement du seuil optimal de prédiction
-|render.yaml #instruction pour execution de l'api et streamlit sur render.com
-|README.md
+API<br>
+|--APP<br>
+|-----main.py # Point d’entrée FastAPI<br>
+|-----model.py # Chargement modèle + prédiction avec seuil<br>
+|-----data.py # Chargement des données clients<br>
+|-----requirements.txt # librairies nécessaires pour l'API<br>
+|--STREAMLIT_APP<br>
+|-----app.py # Point d’entrée interface streamlit<br>
+|-----requirements.txt # librairies nécessaires pour streamlit<br>
+|--TESTS<br>
+|-----test_api.py # lancer les tests unitaires de l'API<br>
+|data.csv # Jeu de données clients (id_client + toutes les features issues de l'éatpe features engineering hors target)<br>
+|LGBMClm_model.pkl # Modèle ML entraîné (via joblib)<br>
+|threshold.txt # Chargement du seuil optimal de prédiction<br>
+|render.yaml #instruction pour execution de l'api et streamlit sur render.com<br>
+|README.md<br>
 
 ## Lancer l’API en local
 - Dans un prompt dos %> uvicorn app.main:app --reload
