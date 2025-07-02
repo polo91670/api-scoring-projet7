@@ -19,6 +19,7 @@ Cette API permet de prédire la probabilité de défaillance de remboursement d�
 - joblib 1.4.2
 - streamlit 1.45.1
 - evidently 0.7.8
+- imbalanced-learn 0.12.3
 
 ## Structure du projet concernant l'API
 API<br>
@@ -53,4 +54,5 @@ API<br>
 Projet réalisé dans le cadre du parcours **Data Scientist - OpenClassrooms**
 
 - Nom : *VA NYIA LU*
+- Prénom : *PAUL*
 - Contact : *paul.va-nyia-lu@cetelem.fr*
