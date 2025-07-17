@@ -11,3 +11,8 @@ plotly
 streamlit
 requests
 shap
+pyplot
+seaborn
+matplotlib
+MinMaxScaler
+confusion_matrix
