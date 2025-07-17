@@ -10,3 +10,4 @@ httpx
 plotly
 streamlit
 requests
+shap
