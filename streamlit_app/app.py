@@ -34,6 +34,8 @@ def load_model():
 
 pipeline = load_model()
 
+
+
 # Seuil utilisé par le modèle
 threshold = 0.51
 
@@ -41,8 +43,17 @@ threshold = 0.51
 API_URL = "https://api-scoring-projet7.onrender.com"
 #API_URL = "http://localhost:8000"
 
-st.title("Projet 7 Openclassroom : Implémenter un modèle de score")
-
+#st.image("https://user.oc-static.com/upload/2023/03/22/16794938722698_Data%20Scientist-P7-01-banner.png", use_container_width=True)
+st.markdown(
+    """
+    <div style="text-align: center;"><img src="https://user.oc-static.com/upload/2023/03/22/16794938722698_Data%20Scientist-P7-01-banner.png" width="75%"></div>
+    """, unsafe_allow_html=True
+)
+#st.title("Dashboard de credit scoring")
+st.markdown(
+    "<h1 style='text-align: center;'>Dashboard de credit scoring</h1>",
+    unsafe_allow_html=True
+)
 
 # Initialiser l'état de session pour éviter la réinitialisation
 if "validated" not in st.session_state:
@@ -74,32 +85,10 @@ def show_gauge(probability):
             
         }
     ))
-    # Ajouter des labels personnalisés sous la jauge
-    #fig.update_layout(height=250, font = {'color': "white", 'family': "Arial"}, 
-    #    annotations=[
-      #      dict(x=0.24, y=1.3, text="Probabilité de défaillance du client (en %)", showarrow=False, font=dict(size=20, color="white"))
-     #       dict(x=0.246, y=0.01, text="Faible", showarrow=False, font=dict(size=12, color="black")),
-    #        dict(x=0.42, y=0.85, text="Modéré", showarrow=False, font=dict(size=12, color="black")),
-    #        dict(x=0.58, y=0.85, text="Élevé", showarrow=False, font=dict(size=12, color="black")),
-    #        dict(x=0.748, y=0.01, text="Élevé", showarrow=False, font=dict(size=12, color="black")),
-    #    ],
-    #    margin={'t':50, 'b':15} 
-    #)
+
     # Pas de titre dans la figure elle-même
     fig.update_layout(height=200, margin=dict(t=20, b=20, l=20, r=20)
                      )
-
-    # Ajoute une annotation pour la valeur à la position voulue
-    #fig.add_annotation(x=0.5, y=0.5, text=round(probability*100,1), showarrow=False,
-    #               font=dict(size=40, color="white"))
-
-    #fig.add_annotation(
-     #   x=0.5, y=0,
-     #   text="🟩 Risque faible &nbsp;&nbsp;🟥 Risque élevé",
-     #   showarrow=False,
-     #   font=dict(size=13),
-     #   xref="paper", yref="paper"
-    #)
 
     st.plotly_chart(fig)
 
@@ -118,50 +107,6 @@ def CreateProgressBar(pg_caption, pg_int_percentage, pg_colour, pg_bgcolour):
 
 #Sélecteur d’ID client
 client_ids, df_client, df_client_with_target, df = load_client_ids()
-
-# Vérification
-#st.dataframe(df_client.head(5))
-
-#st.markdown("""
-#    <style>
-#    div.stButton > button {
-#        display: block;
-#        margin-left: 300px;
-#        margin-right: auto;
-#    }
-#    </style>
-#""", unsafe_allow_html=True)
-
-#st.markdown("""
-#    <style>
-#    div.stButton > button {
-#        font-size: 20px;
-#        padding: 0.5em 1em;
-#        width: 100%;
-#        white-space: nowrap;
-#    }
-#    </style>
-#""", unsafe_allow_html=True)
-
-# CSS pour ajuster la hauteur et la marge de la selectbox
-#st.markdown("""
-#    <style>
-#    /* Largeur et centrage de la selectbox */
-#    div[data-baseweb="select"] {
-#        width: 110px !important;
-#        margin: 0;
-#        padding-top: 0 !important;
-#        padding-bottom: 0 !important;
-#    }
-#    /* Aligner verticalement le contenu de la selectbox */
-#    div[data-baseweb="select"] > div {
-#        display: flex;
-#        align-items: center;
-#        height: 36px;  /* ajuster la hauteur au besoin */
-#    }
-#    </style>
-#""", unsafe_allow_html=True)
-
 
 # Centrage via colonnes
 left, center, right = st.columns([1, 2, 1])
@@ -189,39 +134,7 @@ with center:
         # Retirer des colonnes inutiles
         exclude_columns = ['TARGET', 'SK_ID_CURR']
         available_features = [col for col in numerical_features if col not in exclude_columns]
-
-        
-    #------------------------
-    # Titre centré
-    #st.markdown(
-    #    "<h4 style='text-align: center;'>Choisissez un identifiant client</h4>",
-    #    unsafe_allow_html=True
-    #)
-
-    # Centrer la selectbox avec un wrapper HTML et du CSS
-   # st.markdown("""
-   #     <style>
-   ##     .select-wrapper {
-    #        display: flex;
-    #        justify-content: center;
-    #        margin-top: 10px;
-    #    }
-    #    .select-wrapper > div {
-    #        width: 1% !important;  /* Largeur du bouton selectbox */
-    #    }
-    #    </style>
-     #   <div class="select-wrapper">
-   # """, unsafe_allow_html=True)
-
-   # selected_id = st.selectbox("", client_ids, key="client_id_select")
-
-   # st.markdown("</div>", unsafe_allow_html=True)
-
-    # Tu peux récupérer les infos du client ici
-  #  client_data = df_client.loc[[selected_id]]
-
     
-    # ✅ Ligne pour les boutons centrés
     b_left, b1, b_spacer, b2, b_right = st.columns([0.3, 1.6, 0.2, 1.6, 0.3])
     with b1:
         if st.button("✅ Valider"):
@@ -236,22 +149,15 @@ with center:
 if st.session_state["validated"]:
     try:
         response = requests.post(f"{API_URL}/predict_score", json={"client_id": selected_id})
-        #st.write("Statut HTTP :", response.status_code)
-        #st.write("Texte brut :", response.text)
 
         if response.status_code == 200:
             result = response.json()
             proba = result.get("score_proba")
             decision = result.get("décision")
-
-            #st.success(f"Probabilité de défaut : {proba:.2%}")
-
-            #st.title("Probabilité de défaillance du client (en %)")
             st.markdown(f"<h1 style='text-align: center; margin-top: 0px; margin-bottom: 0px; font-size: 20px;'>Probabilité de défaillance du client { selected_id} (en %)</h1>", unsafe_allow_html=True)
             
             show_gauge(proba)  #Affiche la jauge ici
 
-            #st.success(f"Décision : {decision}")
             if proba <= threshold:
                 icone_response = "&#x2714;" #"&#x2705;"
                 color_reponse = "#008BFB" #49C289
@@ -272,14 +178,7 @@ if st.session_state["validated"]:
             </div><br>
             """, unsafe_allow_html=True)
 
-            # Initialisation de SHAP
-            #explainer = shap.TreeExplainer(model)
-            #shap_values = explainer.shap_values(df_client)
-
-
             # Affichage des données du client
-            #st.subheader(f"📄 Données du client sélectionné : {selected_id}")
-            #st.dataframe(client_data)
             scaler = pipeline.named_steps['scaler']
             model = pipeline.named_steps['model']
             
@@ -291,7 +190,7 @@ if st.session_state["validated"]:
                 st.error(f"Erreur lors de la transformation des données : {e}")
                 st.stop()
             
-            # --- 4. Prédiction de la probabilité
+            # Prédiction de la probabilité
             try:
                 y_proba = model.predict_proba(X_scaled_df)
                 if y_proba.shape[1] == 2:
@@ -303,7 +202,7 @@ if st.session_state["validated"]:
                 st.error(f"Erreur lors de la prédiction : {e}")
                 st.stop()
     
-            # --- 5. SHAP TreeExplainer
+            # SHAP TreeExplainer
             try:
                 explainer = shap.TreeExplainer(model)
                 shap_values = explainer.shap_values(X_scaled_df)
@@ -446,7 +345,7 @@ if st.session_state["validated"]:
                     nbins=50,
                     barmode='overlay',
                     opacity=0.6,
-                    color_discrete_map={0: 'green', 1: 'red'},
+                    color_discrete_map={0: '#008BFB', 1: '#D83E69'},
                     labels={'proba': 'Score de probabilité', 'TARGET': 'Classe réelle'}
                     #title="Distribution des scores de probabilité (modèle de scoring)"
                 )
@@ -454,21 +353,31 @@ if st.session_state["validated"]:
                 # Ligne bleue : client sélectionné
                 fig.add_vline(
                     x=client_score,
-                    line_color="white",
+                    line_color="red",
                     line_width=2,
-                    line_dash="dash",
-                    annotation_text=f"Client<br>{selected_id}",
-                    annotation_position="top right"
+                    line_dash="solid",
+                    annotation=dict(
+                        text=f"Client<br>{selected_id}",
+                        font=dict(color="red", size=12),
+                        showarrow=False,
+                        xanchor="left",
+                        yanchor="top"
+                    )
                 )
             
                 # Ligne rouge : seuil de décision
                 fig.add_vline(
                     x=threshold,
-                    line_color="red",
+                    line_color="white",
                     line_width=2,
-                    line_dash="dot",
-                    annotation_text=f"Seuil décision<br>{int(threshold*100)}%",
-                    annotation_position="top right"
+                    line_dash="solid",
+                    annotation=dict(
+                        text=f"Seuil décision<br>{int(threshold*100)}%",
+                        font=dict(color="white", size=12),
+                        showarrow=False,
+                        xanchor="right",
+                        yanchor="top"
+                    )
                 )
             
                 # Layout
@@ -476,13 +385,48 @@ if st.session_state["validated"]:
                     height=500,
                     xaxis_title="Probabilité de défaillance",
                     yaxis_title="Nombre de clients",
-                    legend_title="Classe réelle",
+                    #legend_title="Classe réelle",
                     margin=dict(t=60, b=80),
-                    xaxis_tickformat=".0%"
+                    xaxis_tickformat=".0%",
+                    showlegend=False
                 )
-            
+
+                fig.add_annotation(
+                    xref="paper", yref="paper",
+                    x=1.00, y=-0.20,
+                    text="🟥 : client défaillant<br>🟦 : client non défaillant",
+                    showarrow=False,
+                    align="left",
+                    font=dict(size=12),
+                    bordercolor="lightgray",
+                    borderwidth=0.5
+                )
+                
                 # Affichage dans Streamlit
                 st.plotly_chart(fig, use_container_width=True)
+
+                # Phrase d’interprétation dynamique
+                if client_score < threshold:
+                    risk_level = "faible"
+                else:
+                    risk_level = "élevé"
+                
+                # calcul le pourcentage de clients ayant un score plus faible que celui du client sélectionné, donc des clients moins risqués.
+                percentile = (df_client_with_target["proba"] < client_score).mean() * 100
+
+                st.markdown(f"""<span style='font-size:14px'>Cet histogramme montre comment se répartissent les clients selon leur probabilité de défaillance prédite par le modèle</span>
+             """, unsafe_allow_html=True)
+
+                st.markdown(f"""<div style="font-size:14px; color:white;">
+                                <p>Résultat pour le client <b>{selected_id}</b> selectionné :</p>
+                                <ul>
+                                    <li>Le client a une probabilité de défaillance de <code>{client_score*100:.1f} %</code></li>
+                                    <li>Cela correspond à un risque <code>{risk_level}</code>  selon le modèle</li>
+                                    <li>Ce score le place dans les <code>{100 - percentile:.0f} %</code>  des clients les plus risqués</li>
+                                    </ul>
+                            </div>
+                  """, unsafe_allow_html=True)
+            
 
             #----------------------------------------------------------------------------------------------------------
             with st.expander("🧮 Matrice de confusion (cliquez pour visualiser)", expanded=False):
@@ -491,44 +435,145 @@ if st.session_state["validated"]:
                 y_true = df_client_with_target['TARGET']
                 y_pred = (df_client_with_target['proba'] >= threshold).astype(int)
                 
-                # Calcul de la matrice de confusion
+                # Matrice de confusion
                 cm = confusion_matrix(y_true, y_pred)
-                
                 tn, fp, fn, tp = cm.ravel()
                 total = cm.sum()
                 
-                # 3. Texte annoté dans chaque cellule (valeur + % + label)
+                # Texte dans chaque cellule (valeurs + pourcentage + type)
                 z_text = [
                     [f"TN<br>{tn} ({tn/total:.1%})", f"FP<br>{fp} ({fp/total:.1%})"],
                     [f"FN<br>{fn} ({fn/total:.1%})", f"TP<br>{tp} ({tp/total:.1%})"]
                 ]
                 
-                # 4. Valeurs numériques pour le heatmap (utilisées pour les couleurs)
+                # Valeurs numériques pour le heatmap
                 z_values = [[tn, fp], [fn, tp]]
                 
-                # 5. Affichage
+                # 5. Création du heatmap Plotly
                 fig_cm = ff.create_annotated_heatmap(
                     z=z_values,
-                    x=["0 (Non défaillant)", "1 (Défaillant)"],
-                    y=["0 (Non défaillant)", "1 (Défaillant)"],
+                    x=["client non défaillant", "client défaillant"],  # prédiction
+                    y=["client non défaillant", "client défaillant"],  # classe réelle
                     annotation_text=z_text,
-                    colorscale="Blues",
+                    #colorscale="Blues",
+                    colorscale=[[0.0, "#e6f2ff"],  # bleu très clair (pour TN si valeur faible)
+                    [0.25, "#cce0ff"],
+                    [0.5, "#99c2ff"],
+                    [0.75, "#4da6ff"],
+                    [1.0, "#0066cc"]],
                     showscale=True,
-                    font_colors=["black"],  # pour garantir la lisibilité
+                    font_colors=["black"],
                     hoverinfo="skip"
                 )
                 
+                # Mise en forme générale
                 fig_cm.update_layout(
-                    height=300,  # hauteur en pixels
-                    width=400,   # largeur en pixels
-                    #title_text=f"Matrice de confusion",
-                    xaxis=dict(title="Prédiction"),
-                    yaxis=dict(title="Classe réelle", autorange='reversed'),  # inverse l’ordre pour cohérence
+                    height=300,
+                    width=400,
+                    xaxis=dict(title="Catégorie prédite par le modèle"),
+                    yaxis=dict(title="Catégorie réelle", autorange='reversed'),
                     margin=dict(t=50, l=100)
                 )
                 
+                # Mettre en valeur le client sélectionné
+                y_true_client = df_client_with_target.loc[selected_id, 'TARGET'] # 0 ou 1
+                y_pred_client = int(df_client_with_target.loc[selected_id, 'proba'] >= threshold)  # 0 ou 1
+                client_score = df_client_with_target.loc[selected_id, 'proba']
+                
+                # Encadré rouge autour de la cellule correspondante
+                fig_cm.add_shape(
+                    type="rect",
+                    x0=y_pred_client - 0.5,
+                    x1=y_pred_client + 0.5,
+                    y0=y_true_client - 0.5,
+                    y1=y_true_client + 0.5,
+                    line=dict(color="red", width=3)
+                )
+                
+                # Annotation dans la cellule
+                x_labels = ["client non défaillant", "client défaillant"]
+                y_labels = ["client non défaillant", "client défaillant"]
+                x_label = x_labels[y_pred_client]
+                y_label = y_labels[y_true_client]
+                
+                # Légende personnalisée en bas à droite
+                fig_cm.add_annotation(
+                    xref="paper", yref="paper",
+                    x=1.02, y=-0.15,
+                    text=f"<span style='color:red; font-weight:bold;'>▢ Client {selected_id}</span>",
+                    showarrow=False,
+                    font=dict(size=12)
+                )
+                
+                # Affichage dans Streamlit
                 st.plotly_chart(fig_cm, use_container_width=True)
-            
+                
+                st.markdown(f"""<span style='font-size:14px'>La matrice de confusion sert à évaluer la qualité des prédictions du modèle de classification comme suit :</span>
+                <br>
+                <table style="width:100%; border: 0.5px solid #ccc; border-collapse: collapse;font-size: 12px;">
+                  <thead>
+                    <tr>
+                      <th style="border: 0.5px solid #ccc; padding: 6px;">Cas</th>
+                      <th style="border: 0.5px solid #ccc; padding: 6px;">Nom</th>
+                      <th style="border: 0.5px solid #ccc; padding: 6px;">Interprétation</th>
+                      <th style="border: 0.5px solid #ccc; padding: 6px;">Impact métier</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">TN</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Vrais négatifs</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Le modèle a bien identifié un client non défaillant</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px; color:#00FF7F;">✅ OK (client accepté à juste titre)</td>
+                    </tr>
+                    <tr>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">TP</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Vrais positifs</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Le modèle a bien identifié un client défaillant</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px; color:#00FF7F;">✅ OK (client risqué à juste titre)</td>
+                    </tr>
+                    <tr>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">FP</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Faux positifs</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Le modèle a refusé un client non défaillant par erreur</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px; color:#D83E69;">❌ Mauvais pour le client (perte d'opportunité)</td>
+                    </tr>
+                    <tr>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">FN</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Faux négatifs</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px;">Le modèle a accepté un client défaillant</td>
+                      <td style="border: 0.5px solid #ccc; padding: 6px; color:#D83E69;">❌ Mauvais pour l’entreprise (perte financière)</td>
+                    </tr>
+                  </tbody>
+                </table></span>
+                """, unsafe_allow_html=True)
+                # Identifier la catégorie (TN, TP, FP, FN)
+                if y_true_client == 0 and y_pred_client == 0:
+                    cat = "TN"
+                    label = "Vrais négatifs"
+                    interpretation = "Le modèle a correctement prédit que le client sera non défaillant"
+                elif y_true_client == 1 and y_pred_client == 1:
+                    cat = "TP"
+                    label = "Vrais positifs"
+                    interpretation = "Le modèle a correctement prédit que le client sera défaillant"
+                elif y_true_client == 0 and y_pred_client == 1:
+                    cat = "FP"
+                    label = "Faux positifs"
+                    interpretation = "Le modèle a prédit une défaillance à tort pour ce client qui était sain"
+                elif y_true_client == 1 and y_pred_client == 0:
+                    cat = "FN"
+                    label = "Faux négatifs"
+                    interpretation = "Le modèle n'a pas détecté une vraie défaillance de ce client à risque"
+
+                st.markdown(f"""<div style="font-size:14px; color:white;">
+                                <p>Résultat pour le client <b>{selected_id}</b> selectionné :</p>
+                                <ul>
+                                    <li>Le client a été catégorisé en <b><code>{cat}</code></b> :  <code>{label}</code></li>
+                                    <li>{interpretation}</li>
+                                    </ul>
+                            </div>
+                  """, unsafe_allow_html=True)
+   
             #----------------------------------------------------------------------------------------------------------
             with st.expander("🕸️ Radar : Comparaison client vs Moyenne Décision (cliquez pour visualiser)", expanded=False):
                 # Sélection dynamique des variables pour le radar
@@ -656,127 +701,287 @@ if st.session_state["validated"]:
                         feature_selected = st.selectbox("Sélectionnez une variable :", features, key="feature_compare")
                 
                 # Valeur du client sélectionné
-                client_value = df_client.loc[selected_id, feature_selected]
+                client_value = df_client_with_target.loc[selected_id, feature_selected]
             
                 # Création du graphique
                 fig, ax = plt.subplots(figsize=(10, 3))
-                sns.histplot(df_client[feature_selected], bins=30, kde=True, color="lightblue", ax=ax)
+
+                # Histogrammes séparés par classe TARGET
+                sns.histplot(data=df_client_with_target, x=feature_selected, hue="TARGET", hue_order=[0, 1], bins=30, kde=True, palette={0: "#008BFB", 1: "#D83E69"}, alpha=0.5, ax=ax)
+          
+                # Ligne verticale pour le client sélectionné
                 ax.axvline(client_value, color='red', linewidth=2, label=f"Client {selected_id}")
-                #ax.set_title(f"Distribution de '{feature_selected}'", fontsize=13)
+                
                 ax.set_xlabel(feature_selected)
-                ax.set_ylabel('Nombres')
-                # Récupérer les limites de l'axe Y pour placer la flèche verticalement au milieu
+                ax.set_ylabel('Nombre')
+                
+                # Limites pour annotation
                 y_min, y_max = ax.get_ylim()
                 mid_y = y_max * 0.5
                 
                 # Annotation latérale (texte à droite, flèche vers la ligne)
                 ax.annotate(
                     f"Client {selected_id}",
-                    xy=(client_value, mid_y),                  # destination de la flèche (trait rouge)
-                    xytext=(client_value + (df_client[feature_selected].max() * 0.05), mid_y),  # texte à droite
-                    ha='left',
-                    va='center',
+                    xy=(client_value, y_max),
+                    xytext=(client_value + (df_client_with_target[feature_selected].max() * 0.05), y_max),
+                    ha='center',
+                    va='bottom',
                     color='red',
-                    arrowprops=dict(facecolor='red', arrowstyle='->'),
+                    #arrowprops=dict(facecolor='#00FA9A', arrowstyle='->'),
                     fontsize=10,
                     fontweight='bold'
                 )
+                
+                # Légende personnalisée
+                # 🛠 Supprimer légende auto-générée
+                ax.legend_.remove()
+                
+                # 🛠 Recréer manuellement la légende avec les bons labels
+                from matplotlib.lines import Line2D
+                custom_legend = [
+                    Line2D([0], [0], color="#008BFB", lw=2, label="Client non défaillant"),
+                    Line2D([0], [0], color="#D83E69", lw=2, label="Client défaillant")
+                ]
+                ax.legend(handles=custom_legend)
 
-                #ax.legend()
                 st.pyplot(fig)
             
                 st.markdown(f"""<span style='font-size:14px; color: red;'><b>|</b></span>
                 <span style='font-size:14px; color: white;'> : Position du client <b>{selected_id}</b> pour <b>{feature_selected}</b> : <code>{client_value:.2f}</code>
                 </span>
                 """, unsafe_allow_html=True)
+
             #----------------------------------------------------------------------------------------------------------         
             with st.expander("📊 Analyse bi-variée entre deux variables (cliquez pour visualiser)", expanded=False):
                 st.markdown("<span style='font-size:14px; color: white;'>Comparez 2 variables du client sélectionné à la distribution des autres clients.</span>", unsafe_allow_html=True)
                 #st.markdown("<span style='font-size:14px; color: white;'>Sélectionnez 2 variables à comparer :</span>", unsafe_allow_html=True)
                 
-                selected_row = df_client.loc[selected_id]
-                features = [col for col in df_client.columns if col != "SK_ID_CURR"]
+                selected_row = df_client_with_target.loc[selected_id]
+                features = [col for col in df_client_with_target.columns if col not in ("SK_ID_CURR","TARGET")]
                 col1, col2 = st.columns(2)
                 with col1:
                     x_var = st.selectbox("1ère variable (axe X) :", features, key="x_select")
                 with col2:
                     y_var = st.selectbox("2ème variable (axe Y) :", features, key="y_select")
                 
-                is_x_cat = df_client[x_var].dtype == "object"
-                is_y_cat = df_client[y_var].dtype == "object"
+                is_x_cat = df_client_with_target[x_var].dtype == "object"
+                is_y_cat = df_client_with_target[y_var].dtype == "object"
                 
                 fig, ax = plt.subplots(figsize=(10, 3))
                 
                 if not is_x_cat and not is_y_cat:
-                    sns.scatterplot(data=df_client, x=x_var, y=y_var, ax=ax)
+                    palette = {0: "#008BFB", 1: "#D83E69"}
+       
+                    sns.scatterplot(data=df_client_with_target, x=x_var, y=y_var, hue="TARGET", palette=palette, ax=ax, alpha=0.6)
+                    # Modifier les labels de la légende
+                    handles, labels = ax.get_legend_handles_labels()
+                    labels = ["Client non défaillant" if l=="0" else "Client défaillant" for l in labels]
+                    ax.legend(handles=handles, labels=labels)
+
                     x = selected_row[x_var]
                     y = selected_row[y_var]
-                    ax.scatter(x, y, color='red', s=40, zorder=5)
-                
-                   # ax.annotate(
-                    #    f"Client {selected_id}\n{x_var} = {x:.2f}\n{y_var} = {y:.2f}",
-                    #    xy=(x, y),
-                     #   xytext=(x + 0.02 * df_client[x_var].std(), y + 0.02 * df_client[y_var].std()),
-                     #   fontsize=9,
-                     #   color='red',
-                     #   arrowprops=dict(facecolor='red', arrowstyle='->'),
-                     #   ha='left'
-                    #)
-                    #ax.set_title(f"{y_var} en fonction de {x_var}")
+                    ax.scatter(x, y, color='#00FF7F', s=50, zorder=5)
                 
                 elif is_x_cat and not is_y_cat:
-                    sns.boxplot(data=df_client, x=x_var, y=y_var, ax=ax)
+                    sns.boxplot(data=df_client_with_target, x=x_var, y=y_var, ax=ax)
                     x = selected_row[x_var]
                     y = selected_row[y_var]
-                    ax.scatter(x, y, color='red', s=40, zorder=5)
-                
-                   # ax.annotate(
-                    #    f"Client {selected_id}\n{x_var} = {x}\n{y_var} = {y:.2f}",
-                   #     xy=(x, y),
-                   #     xytext=(0.2, y + 0.05 * df_client[y_var].std()),
-                  #      textcoords='data',
-                  #      fontsize=9,
-                  #      color='red',
-                  #      arrowprops=dict(facecolor='red', arrowstyle='->'),
-                  #      ha='left'
-                  #  )
-                   # ax.set_title(f"{y_var} selon {x_var}")
+                    ax.scatter(x, y, color='#00FF7F', s=50, zorder=5)
                 
                 elif not is_x_cat and is_y_cat:
-                    sns.boxplot(data=df_client, x=y_var, y=x_var, ax=ax)
+                    sns.boxplot(data=df_client_with_target, x=y_var, y=x_var, ax=ax)
                     x = selected_row[y_var]
                     y = selected_row[x_var]
-                    ax.scatter(x, y, color='red', s=40, zorder=5)
-                
-                    #ax.annotate(
-                    #    f"Client {selected_id}\n{y_var} = {x}\n{x_var} = {y:.2f}",
-                    #    xy=(x, y),
-                   #     xytext=(0.2, y + 0.05 * df_client[x_var].std()),
-                    #    textcoords='data',
-                    #    fontsize=9,
-                    #    color='red',
-                   #     arrowprops=dict(facecolor='red', arrowstyle='->'),
-                   #     ha='left'
-                   # )
-                    #ax.set_title(f"{x_var} selon {y_var}")
+                    ax.scatter(x, y, color='#00FF7F', s=50, zorder=5)
                 
                 else:
                     # Catégorie vs Catégorie → heatmap
-                    crosstab = pd.crosstab(df_client[x_var], df_client[y_var])
+                    crosstab = pd.crosstab(df_client_with_target[x_var], df_client[y_var])
                     sns.heatmap(crosstab, annot=True, fmt="d", cmap="YlGnBu", ax=ax)
-                    #ax.set_title(f"Fréquence croisée : {x_var} vs {y_var}")
-                    # Pas de point individuel possible ici
                 
                 st.pyplot(fig)
                 # Affichage des valeurs en dehors du graphique :
                 if x is not None and y is not None:
                     st.markdown(f"""
                     <div style='color: white; font-size:14px; margin-top: 10px;'>
-                    <span style='font-size: 20px; color: red;'>●</span> : Position du client <b>{selected_id}</b> pour <b>{x_var}</b> = <code>{x}</code> et <b>{y_var}</b> = <code>{y}</code>
+                    <span style='font-size: 20px; color: #00FF7F;'>●</span> : Position du client <b>{selected_id}</b> pour <b>{x_var}</b> = <code>{x}</code> et <b>{y_var}</b> = <code>{y}</code>
                     </div>
                     """, unsafe_allow_html=True)
                     
+            #----------------------------------------------------------------------------------------------------------          
+            with st.expander("🧪 Simulation du score de probabilité (cliquez pour visualiser)", expanded=False):
+                st.markdown(f"""<span style='font-size:14px; color: white;'>Modifiez les 6 variables ci-dessous pour observer l’impact sur la probabilité de défaillance du client <b>{selected_id}</b> :</span>""", unsafe_allow_html=True)
+            
+                # Supprimer les colonnes non utilisées
+                cols_to_drop = ["TARGET", "proba", "PREDICTION", "SK_ID_CURR"]
+                df_features = [col for col in df_client_with_target.columns if col not in cols_to_drop]
+            
+                # Vérification du nombre de colonnes
+                model_features = pipeline.named_steps['model'].feature_name_
+            
+                if len(df_features) != len(model_features):
+                    st.error(f"❌ Incohérence : {len(df_features)} colonnes dans df_client_with_target vs {len(model_features)} dans le modèle.")
+                else:
+                    # Mapping complet : vrai nom ➜ nom du modèle
+                    full_feature_mapping = dict(zip(df_features, model_features))
+            
+                    # Liste des variables modifiables
+                    vars_to_modify = ["EXT_SOURCE_1", "EXT_SOURCE_2", "EXT_SOURCE_3", "PAYMENT_RATE", "CODE_GENDER", "DAYS_EMPLOYED"]
+            
+                    # Valeurs actuelles du client sélectionné
+                    original_row = df_client_with_target.loc[[selected_id]]
+                    original_values = original_row.loc[selected_id, vars_to_modify]
+                    #st.write("original_row:",original_row)
+                    #st.write("original_values:",original_values)       
+                    
+                    with st.form(key="form_simulation"):
+                                        
+                        col1, col2, col3 = st.columns(3)
+                        EXT_SOURCE_1_real = col1.slider("EXT_SOURCE_1", 0.0, 1.0, float(original_values["EXT_SOURCE_1"]), step=0.001, format="%.3f", help="Score externe basé sur la stabilité professionnelle du client")
+                        EXT_SOURCE_2_real = col2.slider("EXT_SOURCE_2", 0.0, 1.0, float(original_values["EXT_SOURCE_2"]), step=0.001, format="%.3f", help="Score externe basé sur l'historique bancaire du client")
+                        EXT_SOURCE_3_real = col3.slider("EXT_SOURCE_3", 0.0, 1.0, float(original_values["EXT_SOURCE_3"]), step=0.001, format="%.3f", help="Score externe basé sur l’analyse comportementale du client")
+            
+                        col4, col5, col6 = st.columns(3)
+                        PAYMENT_RATE_real = col4.slider("PAYMENT_RATE (%)", 0.0, 100.0, float(original_values["PAYMENT_RATE"] * 100), step=0.01, format="%.2f", help="Montant de remboursement mensuel rapporté au crédit (en %)") / 100
+                        DAYS_EMPLOYED_real = col5.slider("DAYS_EMPLOYED", 0, 20000, round(original_values["DAYS_EMPLOYED"]), step=1, format="%.0f", help="Nombre de jours depuis le début de l’emploi (jusqu’à 20 000 jours)") 
+                        gender_map = {0: "Male", 1: "Female", 0.0: "Male", 1.0: "Female", "0": "Male", "1": "Female"}
+                        gender_str = gender_map.get(original_values["CODE_GENDER"], "M") 
+                        CODE_GENDER = col6.selectbox(
+                                "CODE_GENDER",
+                                ["Male", "Female"],
+                                index=["Male", "Female"].index(gender_str),  # garde la valeur par défaut du client
+                                help="Sexe du client"
+                            )
+            
+                        col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 1, 1])
 
+                        with col3:
+                            submitted = st.form_submit_button("🔄 Recalculer le score")
+    
+                        #submitted = st.form_submit_button("🔄 Recalculer le score")
+            
+                    if submitted:
+                        # Mise à jour des valeurs modifiées dans la ligne d'origine
+                        modified_row = original_row.copy()
+                        modified_row.loc[selected_id, "EXT_SOURCE_1"] = EXT_SOURCE_1_real
+                        modified_row.loc[selected_id, "EXT_SOURCE_2"] = EXT_SOURCE_2_real
+                        modified_row.loc[selected_id, "EXT_SOURCE_3"] = EXT_SOURCE_3_real
+                        modified_row.loc[selected_id, "PAYMENT_RATE"] = PAYMENT_RATE_real
+                        modified_row.loc[selected_id, "CODE_GENDER"] = CODE_GENDER
+                        modified_row.loc[selected_id, "DAYS_EMPLOYED"] = DAYS_EMPLOYED_real
+
+                        # Préparation des données pour le modèle
+                        X_old = original_row[df_features].copy()
+                        X_new = modified_row[df_features].copy()
+                
+                        # Encodage de CODE_GENDER : M → 0, F → 1
+                        X_old["CODE_GENDER"] = original_values["CODE_GENDER"]
+                        X_new["CODE_GENDER"] = 0 if CODE_GENDER == "Male" else 1
+                        
+                        # Prédictions via pipeline (scaling + modèle)
+                        old_score = pipeline.predict_proba(X_old)[0][1]
+                        new_score = pipeline.predict_proba(X_new)[0][1]
+
+
+                        # Affichage
+                        if old_score <= threshold:
+                            icone_response_old_score = "&#x2714;" #"&#x2705;"
+                            color_reponse_old_score = "#008BFB" #49C289
+                            decision_old_score = "Accepté"
+                            if old_score <= (threshold/2):
+                                interpretation_old_score = "🟩 Risque faible de défaillance"
+                            else:
+                                interpretation_old_score = "🟨 Risque modéré de défaillance"
+                        if old_score > threshold:
+                            icone_response_old_score = "&#x274C;"
+                            color_reponse_old_score = "#D83E69"
+                            decision_old_score = "Refusé"
+                            if old_score > (threshold + ((1-threshold)/2)):
+                                interpretation_old_score = "🟥 Risque très elevé de défaillance"
+                            else:
+                                interpretation_old_score = "🟧 Risque elevé de défaillance"
+                        if new_score <= threshold:
+                            icone_response_new_score = "&#x2714;" #"&#x2705;"
+                            color_reponse_new_score = "#008BFB" #49C289
+                            decision_new_score = "Accepté"
+                            if new_score <= (threshold/2):
+                                interpretation_new_score = "🟩 Risque faible de défaillance"
+                            else:
+                                interpretation_new_score = "🟨 Risque modéré de défaillance"
+                        if new_score > threshold:
+                            icone_response_new_score = "&#x274C;"
+                            color_reponse_new_score = "#D83E69"
+                            decision_new_score = "Refusé"
+                            if new_score > (threshold + ((1-threshold)/2)):
+                                interpretation_new_score = "🟥 Risque très elevé de défaillance"
+                            else:
+                                interpretation_new_score = "🟧 Risque elevé de défaillance"
+
+                        initial_proba = old_score  
+                        new_proba = new_score      
+                        initial_decision = decision_old_score
+                        new_decision = decision_new_score
+                        
+                        st.markdown(
+                            f"""
+                            <style>
+                            .result-table {{
+                                border-collapse: collapse;
+                                font-size: 16px;
+                                color: white;
+                                width: 100%;
+                                margin: 10px auto; /* Centrage horizontal */
+                            }}
+                            .result-table th, .result-table td {{
+                                border: 1px solid #444;
+                                padding: 5px;
+                                text-align: center;
+                            }}
+                            .result-table th {{
+                                background-color: #333;
+                            }}
+                            .result-table tr:nth-child(even) {{
+                                background-color: #222;
+                            }}
+                            .highlighted-left {{
+                                border-left: 2px solid white !important;
+                                border-top: 2px solid white !important;
+                                border-bottom: 2px solid white !important;
+                            }}
+                            .highlighted-mid {{
+                                border-top: 2px solid white !important;
+                                border-bottom: 2px solid white !important;
+                            }}
+                            .highlighted-right {{
+                                border-right: 2px solid white !important;
+                                border-top: 2px solid white !important;
+                                border-bottom: 2px solid white !important;
+                            }}
+                            </style>
+                            <div style="font-size:14px; color:white;"><p>Résultat de la simulation pour le client <b>{selected_id}</b> selectionné :</p></div>
+                            <table class="result-table">
+                                <tr>
+                                    <th></th>
+                                    <th><span style="font-size:13px; color:white;">Probabilité de défaillance</span></th>
+                                    <th><span style="font-size:13px; color:white;">Intérprétation</span></th>
+                                    <th><span style="font-size:13px; color:white;">Décision</span></th>
+                                </tr>
+                                <tr>
+                                    <td style='text-align:left;'><span style="font-size:13px; color:white;"><b>Avec les valeurs initiales</b></span></td>
+                                    <td><span style="font-size:13px; color:white;">{initial_proba:.1%}</span></td>
+                                    <td style='text-align:left;'><span style="font-size:13px; color:white;">{interpretation_old_score}</span></td>
+                                    <td style='text-align:left;'><b><span style="font-size:13px; color:{color_reponse_old_score}">{decision_old_score}</span></b> {icone_response_old_score}</font></td>
+                                </tr>
+                                <tr>
+                                    <td class="highlighted-left" style='text-align:left;'><span style="font-size:13px; color:white;"><b>Avec les nouvelles valeurs</b></span></td>
+                                    <td class="highlighted-mid"><span style="font-size:13px; color:white;">{new_proba:.1%}</span></td>
+                                    <td class="highlighted-mid" style='text-align:left;'><span style="font-size:13px; color:white;">{interpretation_new_score}</span></td>
+                                    <td class="highlighted-right" style='text-align:left;'><b><span style="font-size:13px; color:{color_reponse_new_score}">{decision_new_score}</font></b> {icone_response_new_score}</font></td>
+                                </tr>
+                            </table>
+                            """,
+                            unsafe_allow_html=True
+                        )
                 
         else:
             st.error(f"Erreur API : {response.status_code}")
