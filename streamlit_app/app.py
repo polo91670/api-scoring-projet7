@@ -422,7 +422,6 @@ if st.session_state["validated"]:
                                 <ul>
                                     <li>Le client a une probabilité de défaillance de <code>{client_score*100:.1f} %</code></li>
                                     <li>Cela correspond à un risque <code>{risk_level}</code>  selon le modèle</li>
-                                    <li>Ce score le place dans les <code>{100 - percentile:.0f} %</code>  des clients les plus risqués</li>
                                     </ul>
                             </div>
                   """, unsafe_allow_html=True)
